@@ -29,7 +29,7 @@ export const defaultCosts: Record<number, number> = {
 };
 
 
-export default function page() {
+export default function UpgradePage() {
   const { user, updateUser, isLoading: authLoading } = useAuth();
   const { vipLevels, loading: vipLoading, error: vipError, } = useVIPLevels();
 
