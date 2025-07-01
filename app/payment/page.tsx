@@ -19,7 +19,7 @@ import { useSearchParams } from "next/navigation";
 import QrCode from "../../styles/QRCode.jpg"
 import Image from "next/image";
 
-export default function PaymentPage() {
+export default function page() {
   const { user } = useAuth();
   const params = useSearchParams();
   const costParam = Number(params.get("cost") ?? "0");
