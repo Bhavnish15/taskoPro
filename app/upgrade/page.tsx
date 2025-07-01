@@ -16,6 +16,16 @@ import { Crown, Check, Zap, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+// 1️⃣ Define your default costs (level 1 through 6)
+export const defaultCosts: Record<number, number> = {
+  1: 0,    // free
+  2: 50,
+  3: 100,
+  4: 150,
+  5: 200,
+  6: 250,
+};
+
 
 export default function UpgradePage() {
   const { user, updateUser, isLoading: authLoading } = useAuth();
@@ -24,10 +34,10 @@ export default function UpgradePage() {
   const { toast } = useToast();
   const router = useRouter()
 
-  
+
   const handleUpgrade = (level: number, cost: number) => {
     if (!user) return;
-    router.push("/payment");
+     router.push(`/payment?level=${level}&cost=${cost}`);
     // if (user.wallet < cost) {
     //   toast({
     //     title: "Insufficient Credits",
@@ -107,15 +117,16 @@ export default function UpgradePage() {
     );
   }
 
-  const displayedLevels = [1, 2, 3, 4, 5].map((lvl) => {
+  const displayedLevels = [1, 2, 3, 4, 5, 6].map((lvl) => {
     const data = vipLevels.find((v) => v.level === lvl);
     return (
       data ?? {
         level: lvl,
         name: `VIP ${lvl}`,
-        cost: 0,
+        cost: defaultCosts[lvl] || 0,
         description: "Unlock awesome benefits",
         color: "gray",
+        price: "",
         timeReduction: 0,
         benefits: [],
       }
@@ -219,13 +230,13 @@ export default function UpgradePage() {
                 <div className="mt-4">
                   {level.cost === 0 ? (
                     <div className="text-2xl font-bold text-green-600">
-                      Free
+                      {level.cost}
                     </div>
                   ) : (
                     <div className="text-2xl font-bold">
                       {level.cost.toLocaleString()}{" "}
                       <span className="text-sm font-normal text-muted-foreground">
-                        credits
+                        omr(﷼)
                       </span>
                     </div>
                   )}
@@ -261,24 +272,18 @@ export default function UpgradePage() {
                   ))}
                 </div>
 
-                <div className="mt-4 text-center">{isCurrent ? (
-                    <Badge>Current</Badge>) : level.cost === 0 ? (
-                    <Button onClick={() => handleUpgrade(level.level, 0)}>
-                      Buy Now
-                    </Button>
+                <div className="mt-4 text-center">
+                  {isCurrent ? (
+                    <Badge>Current</Badge>
                   ) : (
-                    <Button
-                      disabled={!canUpgrade}
-                      onClick={() =>
-                        handleUpgrade(level.level, level.cost)
-                      }
-                    >
-                      {canUpgrade
-                        ? `Buy VIP ${level.level}`
-                        : "Locked"}
+                    <Button onClick={() => handleUpgrade(level.level, level.cost)}>
+                      {level.cost === 0
+                        ? `Upgrade to ${level.name} (Free)`
+                        : `Proceed to Payment`}
                     </Button>
                   )}
                 </div>
+
               </CardContent>
             </Card>
           );

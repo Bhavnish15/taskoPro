@@ -17,6 +17,7 @@ import {
   writeBatch,
   type DocumentData,
   type QueryDocumentSnapshot,
+  addDoc,
 } from "firebase/firestore"
 import { db } from "./firebase"
 import type { User, Task, VIPLevel, TaskProgress, UserStats, ContactForm } from "@/types"
@@ -444,4 +445,21 @@ export class DatabaseService {
 
     await batch.commit()
   }
+}
+
+// Payments function
+export async function createVipPayment(payment: {
+  userId: string
+  email: string
+  country: string
+  currency: string
+  amount: number
+  method: string
+  proofUrl: string
+}) {
+  const docRef = await addDoc(collection(db, "vipPayments"), {
+    ...payment,
+    createdAt: serverTimestamp(), // use server time for consistency
+  })
+  return docRef.id
 }
