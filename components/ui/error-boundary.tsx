@@ -1,4 +1,5 @@
 "use client"
+export const dynamic = "force-dynamic";
 import { Component, type ErrorInfo, type ReactNode } from "react"
 import { Button } from "./button"
 import { Card, CardContent, CardHeader, CardTitle } from "./card"
